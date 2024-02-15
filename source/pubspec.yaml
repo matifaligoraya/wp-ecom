@@ -37,9 +37,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   shared_preferences: ^2.2.2
   get: ^4.6.6
-  http: ^1.2.0
   cached_network_image: ^3.3.1
   flutter_screenutil: ^5.9.0
+  woocommerce_api: ^0.1.0
+  flutter_widget_from_html: ^0.14.11
 
 dev_dependencies:
   flutter_test:
