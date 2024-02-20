@@ -70,4 +70,18 @@ Future<List<Product>> productDataByCat({required int catId}) async {
     throw Exception(e.toString());
   }
 }
+
+Future<Product> productDetails({required int productId}) async {
+  try {
+
+    // Get data using the "menus" endpoint
+    var productsResponse = await BaseAdress.wooCommerceAPI.getAsync("product/$productId");
+
+     Product product = Product.fromJson(productsResponse);
+
+    return product;
+  } catch (e) {
+    throw Exception(e.toString());
+  }
+}
 }

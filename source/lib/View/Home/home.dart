@@ -67,7 +67,7 @@ class _HomeState extends State<Home> {
         drawer: const CustomDrawer(),
         key: _scaffoldKey,
         body: NestedScrollView(
-          physics: ClampingScrollPhysics(),
+          physics: const ClampingScrollPhysics(),
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               silverAppBar(
@@ -106,237 +106,347 @@ class _HomeState extends State<Home> {
               ),
 
               ///deals of the day
-              Container(
-                decoration: BoxDecoration(
-                    border: Border.all(
-                        color: AppColors.primaryYellow, width: 2.0.w)),
-                height: 400.h,
-                width: double.infinity.w,
-                child: Column(children: [
-                  ///title and button section
-                  Container(
-                    decoration: const BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(color: AppColors.darkBlack))),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ///title
-                          Text(
-                            'Deals Of The Day',
-                            style: TextStyle(
-                                color: AppColors.darkBlack,
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.bold),
-                          ),
+              dealsOfTheDayWidget().paddingSymmetric(horizontal: 15.0.w),
 
-                          ///buttons
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                  onPressed: () {
-                                    pageViewController.animateToPage(
-                                      pageViewController.page!.toInt() + 1,
-                                      duration:
-                                          const Duration(milliseconds: 1000),
-                                      curve: Curves.easeInOutQuad,
-                                    );
-                                  },
-                                  icon: Container(
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: AppColors.darkBlack),
-                                          shape: BoxShape.circle),
-                                      child: Icon(
-                                        Icons.arrow_forward_ios_rounded,
-                                        size: 12.0.h,
-                                      ).paddingAll(5.0))),
-                              IconButton(
-                                  onPressed: () {
-                                    pageViewController.animateToPage(
-                                      pageViewController.page!.toInt() - 1,
-                                      duration:
-                                          const Duration(milliseconds: 1000),
-                                      curve: Curves.easeInOutQuad,
-                                    );
-                                  },
-                                  icon: Container(
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: AppColors.darkBlack),
-                                          shape: BoxShape.circle),
-                                      child: Icon(
-                                        Icons.arrow_back_ios_new_rounded,
-                                        size: 12.0.h,
-                                      ).paddingAll(5.0)))
-                            ],
+              SizedBox(
+                height: 20.h,
+              ),
+
+              Obx(
+                () => Container(
+                        decoration: BoxDecoration(
+                            border:
+                                Border.all(color: Colors.grey, width: 1.0.w)),
+                        height: 500.h,
+                        width: double.infinity.w,
+                        child: Column(children: [
+                          ///title and button section
+                          Container(
+                            width: double.infinity,
+                            decoration: const BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: AppColors.darkBlack))),
+                            child: Text(
+                              'Top 20 Best Seller',
+                              style: TextStyle(
+                                  color: AppColors.darkBlack,
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.bold),
+                            ).paddingOnly(bottom: 5.0.h, top: 5.0.w),
                           )
-                        ]).paddingOnly(bottom: 5.0.h, top: 5.0.w),
-                  )
 
-                  //pageView
-                  ,
-                  Obx(
-                    () => homePageController.isLoading.value
-                        ? const Center(
-                            child: CupertinoActivityIndicator(
-                            color: AppColors.darkBlack,
-                          ))
-                        : Flexible(
-                            child: PageView.builder(
-                            controller: pageViewController,
+                          ///listView
+                          ,
+                        homePageController.isLoadingProductCat.value ? const Expanded(child: Center(child: CupertinoActivityIndicator(color: AppColors.darkBlack,),)) : Flexible(
+                              child: ListView.builder(
+                            padding: const EdgeInsets.only(top: 0.0),
                             itemCount: homePageController.productData.length,
                             itemBuilder: (context, index) {
-                              var productCategoryIDs = homePageController
-                                  .productData[index].productCat;
-
-                              // Ensure productCategoryIDs is not null
-                              if (productCategoryIDs != null &&
-                                  productCategoryIDs.isNotEmpty) {
-                                // Find the first matching category
-                                var category = homePageController.productCatData
-                                    .firstWhereOrNull(
-                                  (element) =>
-                                      productCategoryIDs.contains(element.id),
-                                );
-
-                                if (category != null) {
-                                  var categoryName = category.name;
-
-                                  // Use categoryName as needed in your UI
-                                  return Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                              return Column(
+                                children: [
+                                  ///row
+                                  Row(
                                     children: [
-                                      Center(
-                                        child: Container(
-                                            child: cachenetworkImage(
-                                                homePageController
-                                                        .productImageData[index]
-                                                        .mediaDetails
-                                                        ?.sizes
-                                                        ?.woocommerceThumbnail
-                                                        ?.sourceUrl ??
-                                                    '',
-                                                double.parse(
-                                                    '${homePageController.productImageData[index].mediaDetails?.sizes?.woocommerceThumbnail?.height ?? 70.h}'),
-                                                double.parse(
-                                                    '${homePageController.productImageData[index].mediaDetails?.sizes?.woocommerceThumbnail?.width ?? 70.h}'))),
-                                      ),
-
-                                      InkWell(
-                                        onTap: () {
-                                          Get.toNamed(Routes.CATDETAIL,
-                                              arguments: {
-                                                'catId': category.id,
-                                                'homeController':
-                                                    homePageController
-                                              });
-                                        },
-                                        child: Text(
-                                          categoryName ?? '',
-                                          style: TextStyle(
-                                              fontSize: 15.sp,
-                                              color: AppColors.darkBlack,
-                                              fontWeight: FontWeight.bold),
-                                          overflow: TextOverflow.visible,
-                                        ),
-                                      ),
-
                                       ///image
-                                      Text(
-                                        homePageController.productData[index]
-                                                .title?.rendered ??
-                                            '',
-                                        style: TextStyle(
-                                            fontSize: 18.sp,
-                                            color: AppColors.darkBlack,
-                                            fontWeight: FontWeight.bold),
-                                        overflow: TextOverflow.visible,
-                                      ),
-                                      // HtmlWidget(
-                                      //    data.content?.rendered?? '',
-                                      // ),
-                                      Row(
-                                        children: [
-                                          Text('\$82.98',
-                                            style: TextStyle(
-                                                fontSize: 18.sp,
-                                                color: Colors.red[700],
-                                                fontWeight: FontWeight.bold),
-                                            overflow: TextOverflow.visible,
-                                          ),
-                                          SizedBox(width: 5.w,),
-                                          Text('\$182.98',
-                                            style: TextStyle(
-                                                fontSize: 14.sp,
-                                                decoration: TextDecoration.lineThrough,
-                                                decorationColor: Colors.grey,
-                                                color: Colors.grey,
-                                                fontWeight: FontWeight.bold),
-                                            overflow: TextOverflow.visible,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  );
-                                }
-                              }
-                              return homePageController
-                                      .isLoadingProductCat.value
-                                  ? const Center(
-                                      child: CupertinoActivityIndicator(
-                                      color: AppColors.darkBlack,
-                                    ))
-                                  : Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Center(
-                                          child: Container(
-                                              child: cachenetworkImage(
-                                                  homePageController
-                                                          .productImageData[
-                                                              index]
-                                                          .mediaDetails
-                                                          ?.sizes
-                                                          ?.woocommerceThumbnail
-                                                          ?.sourceUrl ??
-                                                      '',
-                                                  double.parse(
-                                                      '${homePageController.productImageData[index].mediaDetails?.sizes?.woocommerceThumbnail?.height ?? 70.h}'),
-                                                  double.parse(
-                                                      '${homePageController.productImageData[index].mediaDetails?.sizes?.woocommerceThumbnail?.width ?? 70.h}'))),
-                                        ),
-
-                                        ///image
-                                        Text(
-                                          homePageController.productData[index]
-                                                  .title?.rendered ??
+                                      cachenetworkImage(
+                                          homePageController
+                                                  .productImageData[index]
+                                                  .mediaDetails
+                                                  ?.sizes
+                                                  ?.woocommerceGalleryThumbnail
+                                                  ?.sourceUrl ??
                                               '',
-                                          style: TextStyle(
-                                              fontSize: 18.sp,
-                                              color: AppColors.darkBlack,
-                                              fontWeight: FontWeight.bold),
-                                          overflow: TextOverflow.visible,
+                                          double.parse(
+                                              '${homePageController.productImageData[index].mediaDetails?.sizes?.woocommerceGalleryThumbnail?.height ?? 70.h}'),
+                                          double.parse(
+                                              '${homePageController.productImageData[index].mediaDetails?.sizes?.woocommerceGalleryThumbnail?.width ?? 70.h}')),
+
+                                      ///title
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            ///text
+                                            InkWell(
+                                              hoverColor:
+                                                  AppColors.primaryYellow,
+                                              onTap: () {
+                                                Get.toNamed(
+                                                    Routes.PRODUCTDETAIL,
+                                                    arguments: {
+                                                      'homeController':
+                                                          homePageController,
+                                                      'product_id':
+                                                          homePageController
+                                                              .productData[
+                                                                  index]
+                                                              .id
+                                                    });
+                                              },
+                                              child: Text(
+                                                homePageController
+                                                        .productData[index]
+                                                        .title
+                                                        ?.rendered ??
+                                                    '',
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                    fontSize: 12.sp,
+                                                    color: Colors.blueAccent,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                overflow: TextOverflow.visible,
+                                              ),
+                                            ),
+                                            // HtmlWidget(
+                                            //    data.content?.rendered?? '',
+                                            // ),
+                                            Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  '\$82.98',
+                                                  style: TextStyle(
+                                                      fontSize: 12.sp,
+                                                      color: Colors.red[700],
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                  overflow:
+                                                      TextOverflow.visible,
+                                                ),
+                                                SizedBox(
+                                                  width: 5.w,
+                                                ),
+                                                Text(
+                                                  '\$182.98',
+                                                  style: TextStyle(
+                                                      fontSize: 10.sp,
+                                                      decoration: TextDecoration
+                                                          .lineThrough,
+                                                      decorationColor:
+                                                          Colors.grey,
+                                                      color: Colors.grey,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                  overflow:
+                                                      TextOverflow.visible,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
-                                        // HtmlWidget(
-                                        //    data.content?.rendered?? '',
-                                        // )
-                                      ],
-                                    );
+                                      )
+                                    ],
+                                  )
+                                ],
+                              );
                             },
-                          )),
-                  )
-                ]).paddingSymmetric(horizontal: 10.0.w),
-              ).paddingSymmetric(horizontal: 15.0.w),
+                          ))
+                        ]).paddingSymmetric(horizontal: 10.0.w))
+                    .paddingSymmetric(horizontal: 15.0.w),
+              ),
+
               SizedBox(
                 height: 20.h,
               ),
             ],
           ),
         ));
+  }
+
+  Widget dealsOfTheDayWidget() {
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(color: AppColors.primaryYellow, width: 2.0.w)),
+      height: 400.h,
+      width: double.infinity.w,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+        ///title and button section
+        Align(
+          alignment: Alignment.topCenter,
+          child: Container(
+            decoration: const BoxDecoration(
+                border: Border(bottom: BorderSide(color: AppColors.darkBlack))),
+            child:
+                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              ///title
+              Text(
+                'Deals Of The Day',
+                style: TextStyle(
+                    color: AppColors.darkBlack,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold),
+              ),
+          
+              ///buttons
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        pageViewController.animateToPage(
+                          pageViewController.page!.toInt() + 1,
+                          duration: const Duration(milliseconds: 1000),
+                          curve: Curves.easeInOutQuad,
+                        );
+                      },
+                      icon: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: AppColors.darkBlack),
+                              shape: BoxShape.circle),
+                          child: Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            size: 12.0.h,
+                          ).paddingAll(5.0))),
+                  IconButton(
+                      onPressed: () {
+                        pageViewController.animateToPage(
+                          pageViewController.page!.toInt() - 1,
+                          duration: const Duration(milliseconds: 1000),
+                          curve: Curves.easeInOutQuad,
+                        );
+                      },
+                      icon: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: AppColors.darkBlack),
+                              shape: BoxShape.circle),
+                          child: Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            size: 12.0.h,
+                          ).paddingAll(5.0)))
+                ],
+              )
+            ]).paddingOnly(bottom: 5.0.h, top: 5.0.w),
+          ),
+        ),
+
+        ///pageView
+
+        FutureBuilder(
+            future: homePageController.loadProductData(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Expanded(
+                  child: Center(
+                    child: CupertinoActivityIndicator(color: AppColors.darkBlack),
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return const Center(
+                  child: Text('There is no items in this category'),
+                );
+              } else {
+                return Obx(
+                  () => Flexible(
+                      child: PageView.builder(
+                    controller: pageViewController,
+                    itemCount: homePageController.productData.length,
+                    itemBuilder: (context, index) {
+                      var productCategoryIDs =
+                          homePageController.productData[index].productCat;
+                      // Ensure productCategoryIDs is not null
+                      if (productCategoryIDs != null &&
+                          productCategoryIDs.isNotEmpty) {
+                        // Find the first matching category
+                        var category =
+                            homePageController.productCatData.firstWhereOrNull(
+                          (element) => productCategoryIDs.contains(element.id),
+                        );
+
+                        if (category != null) {
+                          var categoryName = category.name;
+
+                          // Use categoryName as needed in your UI
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Center(
+                                child: cachenetworkImage(
+                                    homePageController
+                                            .productImageData[index]
+                                            .mediaDetails
+                                            ?.sizes
+                                            ?.woocommerceThumbnail
+                                            ?.sourceUrl ??
+                                        '',
+                                    double.parse(
+                                        '${homePageController.productImageData[index].mediaDetails?.sizes?.woocommerceThumbnail?.height ?? 70.h}'),
+                                    double.parse(
+                                        '${homePageController.productImageData[index].mediaDetails?.sizes?.woocommerceThumbnail?.width ?? 70.h}')),
+                              ),
+
+                              InkWell(
+                                hoverColor: Colors.blueAccent,
+                                onTap: () {
+                                  Get.toNamed(Routes.CATDETAIL, arguments: {
+                                    'catId': category.id,
+                                    'homeController': homePageController
+                                  });
+                                },
+                                child: Text(
+                                  categoryName ?? '',
+                                  style: TextStyle(
+                                      fontSize: 15.sp,
+                                      color: AppColors.darkBlack,
+                                      fontWeight: FontWeight.bold),
+                                  overflow: TextOverflow.visible,
+                                ),
+                              ),
+
+                              ///image
+                              Text(
+                                homePageController
+                                        .productData[index].title?.rendered ??
+                                    '',
+                                style: TextStyle(
+                                    fontSize: 18.sp,
+                                    color: AppColors.darkBlack,
+                                    fontWeight: FontWeight.bold),
+                                overflow: TextOverflow.visible,
+                              ),
+                              // HtmlWidget(
+                              //    data.content?.rendered?? '',
+                              // ),
+                              Row(
+                                children: [
+                                  Text(
+                                    '\$82.98',
+                                    style: TextStyle(
+                                        fontSize: 18.sp,
+                                        color: Colors.red[700],
+                                        fontWeight: FontWeight.bold),
+                                    overflow: TextOverflow.visible,
+                                  ),
+                                  SizedBox(
+                                    width: 5.w,
+                                  ),
+                                  Text(
+                                    '\$182.98',
+                                    style: TextStyle(
+                                        fontSize: 14.sp,
+                                        decoration: TextDecoration.lineThrough,
+                                        decorationColor: Colors.grey,
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.bold),
+                                    overflow: TextOverflow.visible,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          );
+                        }
+                      }
+                    },
+                  )),
+                );
+              }
+            })
+      ]).paddingSymmetric(horizontal: 10.0.w),
+    );
   }
 
   Widget cardWidget() {

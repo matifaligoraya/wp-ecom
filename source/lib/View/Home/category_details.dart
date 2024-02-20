@@ -62,6 +62,7 @@ class _CategoryDetailState extends State<CategoryDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(),
       key: _scaffoldKey,
       body: NestedScrollView(
         physics: const ClampingScrollPhysics(),
@@ -115,49 +116,77 @@ class _CategoryDetailState extends State<CategoryDetail> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Obx(
-  () => InkWell(
-    onTap: () {
-      catController.toggleGridviewSection(index);
-    },
-    child: Stack(
-      alignment: Alignment.bottomCenter,
-      children: [
-        Center(
-          child: cachenetworkImage(
-            catController.productImageData[index].mediaDetails?.sizes
-                    ?.woocommerceGalleryThumbnail?.sourceUrl ??
-                '',
-            double.parse(
-              '${catController.productImageData[index].mediaDetails?.sizes?.woocommerceGalleryThumbnail?.height ?? 70.h}',
-            ),
-            double.parse(
-              '${catController.productImageData[index].mediaDetails?.sizes?.woocommerceGalleryThumbnail?.width ?? 70.h}',
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          child: AnimatedOpacity(
-            duration: const Duration(milliseconds: 500),
-            opacity: catController.isGridviewScetionEnableList[index] ? 1.0 : 0.0,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeInBack,
-              color: Colors.white,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: iconListForgridView.map((icon) => icon).toList(),
-              ),
-            ),
-          ),
-        ),
-      ],
-    ),
-  ),
-),
-
+                                              () => InkWell(
+                                                onTap: () {
+                                                  catController
+                                                      .toggleGridviewSection(
+                                                          index);
+                                                },
+                                                child: Stack(
+                                                  alignment:
+                                                      Alignment.bottomCenter,
+                                                  children: [
+                                                    Center(
+                                                      child: cachenetworkImage(
+                                                        catController
+                                                                .productImageData[
+                                                                    index]
+                                                                .mediaDetails
+                                                                ?.sizes
+                                                                ?.woocommerceGalleryThumbnail
+                                                                ?.sourceUrl ??
+                                                            '',
+                                                        double.parse(
+                                                          '${catController.productImageData[index].mediaDetails?.sizes?.woocommerceGalleryThumbnail?.height ?? 70.h}',
+                                                        ),
+                                                        double.parse(
+                                                          '${catController.productImageData[index].mediaDetails?.sizes?.woocommerceGalleryThumbnail?.width ?? 70.h}',
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Positioned(
+                                                      bottom: 0,
+                                                      left: 0,
+                                                      right: 0,
+                                                      child: AnimatedOpacity(
+                                                        duration:
+                                                            const Duration(
+                                                                milliseconds:
+                                                                    500),
+                                                        opacity: catController
+                                                                    .isGridviewScetionEnableList[
+                                                                index]
+                                                            ? 1.0
+                                                            : 0.0,
+                                                        child:
+                                                            AnimatedContainer(
+                                                          duration:
+                                                              const Duration(
+                                                                  milliseconds:
+                                                                      500),
+                                                          curve:
+                                                              Curves.easeInBack,
+                                                          color: Colors.white,
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: catController
+                                                                        .isGridviewScetionEnableList[
+                                                                    index]
+                                                                ? iconListForgridView
+                                                                    .map((icon) =>
+                                                                        icon)
+                                                                    .toList()
+                                                                : [],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
 
                                             ///image
                                             Text(

@@ -11,16 +11,37 @@ class HomeController extends GetxController {
   final homerepo = HomeRepository().obs;
   RxList<ImageGettingModel> logoData = <ImageGettingModel>[].obs;
   RxList<Product> productData = <Product>[].obs;
+  Rx<Product> productDetail = Product().obs;
+  Rx<ProductImageModel> productImageDetail = ProductImageModel().obs;
   RxList<ProductImageModel> productImageData = <ProductImageModel>[].obs;
   RxList<ProductCatModel> productCatData = <ProductCatModel>[].obs;
+  RxList<ProductCatModel> productCatList = <ProductCatModel>[].obs;
   final isLoading = false.obs;
   final isLoadingProductCat = false.obs;
 
   @override
   void onInit() {
     _loadData();
-    _loadProductData();
     super.onInit();
+  }
+
+  // Add an RxInt for quantity
+  var quantity = 1.obs;
+
+  // Add a method to increment the quantity
+  void incrementQuantity() {
+    quantity.value++;
+  }
+
+  void updateQuantity(int newQuantity) {
+    quantity.value = newQuantity;
+  }
+
+  // Add a method to decrement the quantity (with a check to prevent going below 1)
+  void decrementQuantity() {
+    if (quantity.value > 1) {
+      quantity.value--;
+    }
   }
 
   // Load data for the controller
@@ -40,9 +61,9 @@ class HomeController extends GetxController {
   }
 
   // Load product data and related image data
-  Future<void> _loadProductData() async {
+  Future<void> loadProductData() async {
     try {
-      isLoading.value = true;
+      isLoadingProductCat.value = true;
 
       // Load product data
       List<Product> result = await homerepo.value.productData();
@@ -58,26 +79,55 @@ class HomeController extends GetxController {
       }
 
       await _loadProductCatData();
+      isLoadingProductCat.value = false;
     } catch (e) {
       Get.snackbar('Error', e.toString());
     } finally {
-      isLoading.value = false;
+      isLoadingProductCat.value = false;
     }
   }
 
   // Load product category data
   Future<void> _loadProductCatData() async {
     try {
-      isLoadingProductCat.value = true;
-
       // Load product category data
       List<ProductCatModel> result = await homerepo.value.productCatData();
       productCatData.value = result;
-      isLoadingProductCat.value = false;
     } catch (e) {
       Get.snackbar('Error', e.toString());
-    } finally {
-      isLoadingProductCat.value = false;
-    }
+    } finally {}
   }
+
+Future<void> loadDeatilsOfProductDes({required int productId}) async {
+  try {
+    // Load product category data
+    Product result = await homerepo.value.productDetails(productId: productId);
+    productDetail.value = result;
+    productImageDetail.value = productImageData.firstWhereOrNull(
+      (image) => image.id == productDetail.value.featuredMedia,
+    ) ??
+        ProductImageModel();
+
+    // Clear productCatList before adding new items
+    productCatList.clear();
+
+    List<int>? productCat = productDetail.value.productCat;
+    if (productCat != null) {
+      for (int catId in productCat) {
+        // Fetch and add the products for each category ID
+        var data = productCatData
+            .where(
+              (data) => data.id == catId,
+            )
+            .toList();
+        productCatList.addAll(data);
+      }
+    }
+  } catch (e) {
+    Get.snackbar('Error', e.toString());
+  } finally {
+    // Any cleanup or additional actions after loading details
+  }
+}
+
 }

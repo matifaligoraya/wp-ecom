@@ -328,10 +328,10 @@ Widget silverAppBar(
                     Obx(
                       () => homePageController.isLoading.value
                           ? const SizedBox.shrink()
-                          : networkImage(
+                          :(homePageController.logoData.first.sourceUrl != '' && homePageController.logoData.first.sourceUrl != null) ? networkImage(
                               homePageController.logoData.first.sourceUrl ?? '',
                               40.h,
-                              120.w),
+                              120.w): FlutterLogo(size: 40.h,),
                     ),
                     Row(children: iconList)
                   ],

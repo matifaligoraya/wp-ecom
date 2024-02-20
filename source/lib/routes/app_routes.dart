@@ -9,6 +9,7 @@ abstract class Routes {
   static const PROFILE = _Paths.PROFILE;
   static const WHISHLIST = _Paths.WHISHLIST;
   static const CATDETAIL = _Paths.CATDETAIL;
+  static const PRODUCTDETAIL = _Paths.PRODUCTDETAIL;
 }
 
 abstract class _Paths {
@@ -17,4 +18,5 @@ abstract class _Paths {
   static const PROFILE = '/profile';
   static const WHISHLIST = '/whishlist';
   static const CATDETAIL = '/catdetail';
+  static const PRODUCTDETAIL = '/productDe';
 }

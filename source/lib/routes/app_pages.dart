@@ -5,6 +5,7 @@ import 'package:ecom_wp/View/Whishlist/whish_list_screen.dart';
 import 'package:get/get.dart';
 
 import '../View/Home/home.dart';
+import '../View/Home/product_detail.dart';
 
 part 'app_routes.dart';
 
@@ -41,6 +42,12 @@ class AppPages {
     GetPage(
       name: _Paths.CATDETAIL,
       page: () => CategoryDetail(),
+      transition: Transition.leftToRightWithFade,
+      transitionDuration: const Duration(milliseconds: 500),
+    ),
+    GetPage(
+      name: _Paths.PRODUCTDETAIL,
+      page: () => const ProductDetail(),
       transition: Transition.leftToRightWithFade,
       transitionDuration: const Duration(milliseconds: 500),
     ),
