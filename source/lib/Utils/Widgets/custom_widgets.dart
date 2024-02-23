@@ -1,5 +1,5 @@
-// ignore_for_file: library_private_types_in_public_api
-
+// ignore_for_file: library_private_types_in_public_api, must_be_immutable
+import 'package:ecom_wp/Services/Controller/store_controller.dart';
 import 'package:ecom_wp/Utils/utils.dart';
 import 'package:ecom_wp/Utils/Widgets/custom_textField.dart';
 import 'package:ecom_wp/routes/app_pages.dart';
@@ -8,10 +8,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../Constants/app_colors.dart';
-import '../../Services/Controller/home_page_controller.dart';
-import '../../View/Checkout/checkout_screen.dart';
-import '../../View/Profile/profile_screen.dart';
-import '../../View/Whishlist/whish_list_screen.dart';
 import 'DotsIndicator/dots_decorator.dart';
 import 'DotsIndicator/dots_indicator.dart';
 
@@ -91,7 +87,8 @@ Widget insideSlider(
             height: 10.h,
           ),
 
-          customButtton('Shop Now', 40.h, 110.w, () {})
+          customButtton('Shop Now', 40.h, 110.w, () {
+          })
         ],
       ).paddingOnly(left: 10.0.w, top: 10.0.h)
     ],
@@ -131,8 +128,10 @@ Widget sliderWidget(
 
 ////customSlider
 class CustomSlider extends StatefulWidget {
-  const CustomSlider({
+  StoreController? storeController;
+  CustomSlider({
     super.key,
+    this.storeController
   });
 
   @override
@@ -141,7 +140,6 @@ class CustomSlider extends StatefulWidget {
 
 class _CustomSliderState extends State<CustomSlider> {
   PageController pageController = PageController();
-  final homePageController = Get.put(HomeController());
 
   int _currentPage = 0;
   final _totalDots = 2;
@@ -173,7 +171,7 @@ class _CustomSliderState extends State<CustomSlider> {
             child: PageView(
                 controller: pageController,
                 onPageChanged: updatePosition,
-                children: homePageController.logoData
+                children: widget.storeController!.logoData
                     .skip(8)
                     .map(
                       (data) => sliderWidget(
@@ -221,7 +219,7 @@ Widget customButtton(
 /////custom slider app bar
 Widget silverAppBar(
     {bool? innerBoxIsScrolled,
-    required HomeController homePageController,
+    required StoreController storeController,
     GlobalKey<ScaffoldState>? scaffoldKey}) {
   ////icons list
   var iconList = [
@@ -326,12 +324,19 @@ Widget silverAppBar(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Obx(
-                      () => homePageController.isLoading.value
+                      () => storeController.isLoading.value
                           ? const SizedBox.shrink()
-                          :(homePageController.logoData.first.sourceUrl != '' && homePageController.logoData.first.sourceUrl != null) ? networkImage(
-                              homePageController.logoData.first.sourceUrl ?? '',
-                              40.h,
-                              120.w): FlutterLogo(size: 40.h,),
+                          : (storeController.logoData.first.sourceUrl != '' &&
+                                  storeController.logoData.first.sourceUrl !=
+                                      null)
+                              ? networkImage(
+                                  storeController.logoData.first.sourceUrl ??
+                                      '',
+                                  40.h,
+                                  120.w)
+                              : FlutterLogo(
+                                  size: 40.h,
+                                ),
                     ),
                     Row(children: iconList)
                   ],

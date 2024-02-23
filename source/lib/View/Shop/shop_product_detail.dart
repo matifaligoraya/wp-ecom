@@ -1,4 +1,4 @@
-import 'package:ecom_wp/Services/Controller/home_page_controller.dart';
+import 'package:ecom_wp/Services/Controller/shop_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,27 +9,19 @@ import '../../Utils/Constants/app_colors.dart';
 import '../../Utils/utils.dart';
 import '../../Utils/Widgets/custom_widgets.dart';
 
-class ProductDetail extends StatefulWidget {
-  const ProductDetail({super.key});
+class ShopProductDetail extends StatefulWidget {
+  const ShopProductDetail({super.key});
 
   @override
-  State<ProductDetail> createState() => _ProductDetailState();
+  State<ShopProductDetail> createState() => _ShopProductDetailState();
 }
 
-class _ProductDetailState extends State<ProductDetail> {
+class _ShopProductDetailState extends State<ShopProductDetail> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   var controller = TextEditingController();
   var productId = Get.arguments['productData'];
-  var homeController = Get.put(HomeController());
-  var storeController = Get.arguments['storeController'];
-
-  var quantity = 1;
-
-  void updateQuantity(int newQuantity) {
-    setState(() {
-      quantity = newQuantity;
-    });
-  }
+  var shopController = Get.put(ShopController());
+  var storeController= Get.arguments['storeController'];
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +40,7 @@ class _ProductDetailState extends State<ProductDetail> {
               ];
             },
             body: FutureBuilder(
-              future: homeController.loadCatAndTag(data: productId),
+              future: shopController.loadCatAndTag(data: productId),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
@@ -84,7 +76,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       Center(
                         child: Container(
                           child: cachenetworkImage(
-                              homeController
+                              shopController
                                       .productImageDetail
                                       .value
                                       .mediaDetails
@@ -93,9 +85,9 @@ class _ProductDetailState extends State<ProductDetail> {
                                       ?.sourceUrl ??
                                   '',
                               double.parse(
-                                  '${homeController.productImageDetail.value.mediaDetails?.sizes?.woocommerceThumbnail?.height ?? 70.h}'),
+                                  '${shopController.productImageDetail.value.mediaDetails?.sizes?.woocommerceThumbnail?.height ?? 70.h}'),
                               double.parse(
-                                  '${homeController.productImageDetail.value.mediaDetails?.sizes?.woocommerceThumbnail?.width ?? 70.h}')),
+                                  '${shopController.productImageDetail.value.mediaDetails?.sizes?.woocommerceThumbnail?.width ?? 70.h}')),
                         ),
                       ),
                       SizedBox(
@@ -203,7 +195,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                 children: [
                                   IconButton(
                                     onPressed: () {
-                                      homeController.decrementQuantity();
+                                      shopController.decrementQuantity();
                                     },
                                     icon: const Icon(Icons.remove,
                                         color: Colors.grey),
@@ -211,7 +203,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                   Expanded(
                                     child: TextFormField(
                                       controller: TextEditingController(
-                                          text: homeController.quantity.value
+                                          text: shopController.quantity.value
                                               .toString()),
                                       textAlign: TextAlign.center,
                                       cursorColor: Colors.black,
@@ -220,7 +212,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                       keyboardType: TextInputType.number,
                                       onChanged: (value) {
                                         if (value.isNotEmpty) {
-                                          homeController
+                                          shopController
                                               .updateQuantity(int.parse(value));
                                         }
                                       },
@@ -231,7 +223,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                   ),
                                   IconButton(
                                     onPressed: () {
-                                      homeController.incrementQuantity();
+                                      shopController.incrementQuantity();
                                     },
                                     icon: const Icon(Icons.add,
                                         color: Colors.grey),
@@ -251,72 +243,80 @@ class _ProductDetailState extends State<ProductDetail> {
                           SizedBox(
                             height: 10.h,
                           ),
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: [
-                                const Text(
-                                  'Category',
-                                  style: TextStyle(color: AppColors.darkBlack),
+                          RichText(
+                            text: TextSpan(children: [
+                              TextSpan(
+                                style: TextStyle(
+                                    color: AppColors.darkBlack,
+                                    fontSize: 14.sp),
+                                text: "Category",
+                              ),
+                              WidgetSpan(
+                                child: SizedBox(
+                                  width: 5.w,
                                 ),
-                                SizedBox(
-                                  width: 10.w,
-                                ),
-                                Row(
-                                  children: homeController.productCatData
-                                      .map(
-                                        (element) => Text(
-                                          element.name.toString(),
-                                          style: TextStyle(
-                                            color: Colors.blueAccent,
-                                            fontSize: 15.sp,
-                                          ),
-                                          overflow: TextOverflow.visible,
-                                          maxLines: 2,
+                              ),
+                              TextSpan(
+                                children: shopController.productCategoryData
+                                    .map(
+                                      (element) => TextSpan(
+                                        style: TextStyle(
+                                          color: Colors.blueAccent,
+                                          fontSize: 16.sp,
                                         ),
-                                      )
-                                      .toList(),
-                                ),
-                              ],
-                            ),
+                                        text: element.name.toString().padLeft(5),
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                            ]),
                           ),
-
                           SizedBox(
                             height: 10.h,
                           ),
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: [
-                                const Text(
-                                  'Tag',
-                                  style: TextStyle(color: AppColors.darkBlack),
+                          RichText(
+                            text: TextSpan(children: [
+                              TextSpan(
+                                style: TextStyle(
+                                    color: AppColors.darkBlack,
+                                    fontSize: 14.sp),
+                                text: "Tags",
+                              ),
+                              WidgetSpan(
+                                child: SizedBox(
+                                  width: 5.w,
                                 ),
-                                SizedBox(
-                                  width: 10.w,
-                                ),
-                                Row(
-                                  children: homeController.productTagData
-                                      .map(
-                                        (element) => Text(
-                                          element.name.toString(),
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 15.sp,
-                                          ),
-                                          overflow: TextOverflow.visible,
-                                          maxLines: 2,
-                                        ).paddingOnly(left: 3.w),
-                                      )
-                                      .toList(),
-                                ),
-                              ],
-                            ),
+                              ),
+                              TextSpan(
+                                children: shopController.productTagData
+                                    .map(
+                                      (element) => TextSpan(
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 16.sp,
+                                        ),
+                                        text: element.name.toString().padLeft(10),
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                            ]),
                           ),
 
                           SizedBox(
-                            height: 60.h,
+                            height: 25.h,
                           ),
+                          Align(
+                        alignment: Alignment.centerLeft,
+                        child: HtmlWidget(
+                          productId.content?.rendered ?? '',
+                          textStyle: const TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                      SizedBox(
+                            height: 25.h,
+                          ),
+                          
                         ],
                       ),
                     ],

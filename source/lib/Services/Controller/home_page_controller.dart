@@ -1,16 +1,12 @@
 import 'dart:convert';
-
 import 'package:ecom_wp/Model/Product%20Models/product.dart';
 import 'package:ecom_wp/Model/Product%20Models/product_cat_model.dart';
 import 'package:ecom_wp/Model/Product%20Models/product_image.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-
 import '../../Utils/Constants/base_adress_api.dart';
-import '../../Model/image_getting_model.dart';
 
 class HomeController extends GetxController {
-  RxList<ImageGettingModel> logoData = <ImageGettingModel>[].obs;
   RxList<Product> productData = <Product>[].obs;
   Rx<Product> productDetail = Product().obs;
   Rx<ProductImageModel> productImageDetail = ProductImageModel().obs;
@@ -20,12 +16,6 @@ class HomeController extends GetxController {
   RxList<ProductCatModel> productTagData = <ProductCatModel>[].obs;
   final isLoading = false.obs;
   final isLoadingProductCat = false.obs;
-
-  @override
-  void onInit() {
-    _loadData();
-    super.onInit();
-  }
 
   // Add an RxInt for quantity
   var quantity = 1.obs;
@@ -43,26 +33,6 @@ class HomeController extends GetxController {
   void decrementQuantity() {
     if (quantity.value > 1) {
       quantity.value--;
-    }
-  }
-
-  // Load data for the controller
-  Future<void> _loadData() async {
-    try {
-      isLoading.value = true;
-      var productsResponse = await BaseAdress.wooCommerceAPI.getAsync("media");
-
-      // Map the response data to your model
-      List<ImageGettingModel> logoImageData = (productsResponse as List)
-          .map((productJson) => ImageGettingModel.fromJson(productJson))
-          .toList();
-      // Load logo data
-      logoData.value = logoImageData;
-      isLoading.value = false;
-    } catch (e) {
-      Get.snackbar('Error', e.toString());
-    } finally {
-      isLoading.value = false;
     }
   }
 

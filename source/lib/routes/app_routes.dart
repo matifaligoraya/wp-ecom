@@ -10,6 +10,8 @@ abstract class Routes {
   static const WHISHLIST = _Paths.WHISHLIST;
   static const CATDETAIL = _Paths.CATDETAIL;
   static const PRODUCTDETAIL = _Paths.PRODUCTDETAIL;
+  static const SHOPPAGE = _Paths.SHOPPAGE;
+  static const SHOPPAGEDETAIL = _Paths.SHOPPAGEDETAIL;
 }
 
 abstract class _Paths {
@@ -19,4 +21,6 @@ abstract class _Paths {
   static const WHISHLIST = '/whishlist';
   static const CATDETAIL = '/catdetail';
   static const PRODUCTDETAIL = '/productDe';
+  static const SHOPPAGE = '/shopPage';
+  static const SHOPPAGEDETAIL = '/shopPagedetail';
 }

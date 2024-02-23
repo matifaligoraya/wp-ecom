@@ -1,3 +1,4 @@
+// ignore_for_file: must_be_immutable
 import 'package:ecom_wp/Services/Controller/store_controller.dart';
 import 'package:ecom_wp/Utils/Constants/app_colors.dart';
 import 'package:ecom_wp/routes/app_pages.dart';
@@ -7,24 +8,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
-import '../../Services/Controller/category_detail_controller.dart';
+import '../../Services/Controller/shop_controller.dart';
 import '../../Utils/utils.dart';
 import '../../Utils/Widgets/custom_widgets.dart';
 
-class CategoryDetail extends StatefulWidget {
-  const CategoryDetail({super.key});
+class ShopPage extends StatefulWidget {
+  ShopPage({
+    super.key,
+  });
 
   @override
-  State<CategoryDetail> createState() => _CategoryDetailState();
+  State<ShopPage> createState() => _ShopPageState();
 }
 
-class _CategoryDetailState extends State<CategoryDetail> {
+class _ShopPageState extends State<ShopPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  final catController = Get.put(CatDataController());
-  var catId = Get.arguments['catId'];
-  var homeController = Get.arguments['homeController'];
-  var storeController= Get.arguments['storeController'];
-
+  var shopController = Get.put(ShopController());
+  var storeController = Get.arguments['storeController'];
   var iconListForgridView = [
     IconButton(
         onPressed: () {
@@ -76,7 +76,7 @@ class _CategoryDetailState extends State<CategoryDetail> {
           ];
         },
         body: FutureBuilder(
-            future: catController.loadProductCatData(catId: catId),
+            future: shopController.loadProductCatData(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
@@ -87,7 +87,7 @@ class _CategoryDetailState extends State<CategoryDetail> {
                   child: Text('There is no items in this category'),
                 );
               } else {
-                var count = catController.productData.length;
+                var count = shopController.productData.length;
                 return Column(
                   children: [
                     ///filter section
@@ -95,7 +95,7 @@ class _CategoryDetailState extends State<CategoryDetail> {
 
                     ///product card
                     Obx(() => Flexible(
-                          child: catController.isGridView.value
+                          child: shopController.isGridView.value
                               ? GridView.builder(
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
@@ -119,7 +119,7 @@ class _CategoryDetailState extends State<CategoryDetail> {
                                             Obx(
                                               () => InkWell(
                                                 onTap: () {
-                                                  catController
+                                                  shopController
                                                       .toggleGridviewSection(
                                                           index);
                                                 },
@@ -129,7 +129,7 @@ class _CategoryDetailState extends State<CategoryDetail> {
                                                   children: [
                                                     Center(
                                                       child: cachenetworkImage(
-                                                        catController
+                                                        shopController
                                                                 .productImageData[
                                                                     index]
                                                                 .mediaDetails
@@ -138,10 +138,10 @@ class _CategoryDetailState extends State<CategoryDetail> {
                                                                 ?.sourceUrl ??
                                                             '',
                                                         double.parse(
-                                                          '${catController.productImageData[index].mediaDetails?.sizes?.woocommerceGalleryThumbnail?.height ?? 70.h}',
+                                                          '${shopController.productImageData[index].mediaDetails?.sizes?.woocommerceGalleryThumbnail?.height ?? 70.h}',
                                                         ),
                                                         double.parse(
-                                                          '${catController.productImageData[index].mediaDetails?.sizes?.woocommerceGalleryThumbnail?.width ?? 70.h}',
+                                                          '${shopController.productImageData[index].mediaDetails?.sizes?.woocommerceGalleryThumbnail?.width ?? 70.h}',
                                                         ),
                                                       ),
                                                     ),
@@ -154,7 +154,7 @@ class _CategoryDetailState extends State<CategoryDetail> {
                                                             const Duration(
                                                                 milliseconds:
                                                                     500),
-                                                        opacity: catController
+                                                        opacity: shopController
                                                                     .isGridviewScetionEnableList[
                                                                 index]
                                                             ? 1.0
@@ -172,7 +172,7 @@ class _CategoryDetailState extends State<CategoryDetail> {
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
                                                                     .center,
-                                                            children: catController
+                                                            children: shopController
                                                                         .isGridviewScetionEnableList[
                                                                     index]
                                                                 ? iconListForgridView
@@ -190,17 +190,36 @@ class _CategoryDetailState extends State<CategoryDetail> {
                                             ),
 
                                             ///image
-                                            Text(
-                                              catController.productData[index]
-                                                      .title?.rendered ??
-                                                  '',
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                  fontSize: 12.sp,
-                                                  color: const Color.fromRGBO(
-                                                      68, 138, 255, 1),
-                                                  fontWeight: FontWeight.bold),
-                                              overflow: TextOverflow.ellipsis,
+                                            InkWell(
+                                              onTap: () {
+                                                Get.toNamed(
+                                                    Routes.SHOPPAGEDETAIL,
+                                                    arguments: {
+                                                      'productData':
+                                                          shopController
+                                                                  .productData[
+                                                              index],
+                                                      'shopController':
+                                                          shopController,
+                                                      'storeController':
+                                                          storeController,
+                                                    });
+                                              },
+                                              child: Text(
+                                                shopController
+                                                        .productData[index]
+                                                        .title
+                                                        ?.rendered ??
+                                                    '',
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                    fontSize: 12.sp,
+                                                    color: const Color.fromRGBO(
+                                                        68, 138, 255, 1),
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
                                             ),
                                             // HtmlWidget(
                                             //    data.content?.rendered?? '',
@@ -251,39 +270,76 @@ class _CategoryDetailState extends State<CategoryDetail> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Center(
-                                                child: cachenetworkImage(
-                                                    catController
-                                                            .productImageData[
-                                                                index]
-                                                            .mediaDetails
-                                                            ?.sizes
-                                                            ?.woocommerceThumbnail
-                                                            ?.sourceUrl ??
-                                                        '',
-                                                    double.parse(
-                                                        '${catController.productImageData[index].mediaDetails?.sizes?.woocommerceThumbnail?.height ?? 70.h}'),
-                                                    double.parse(
-                                                        '${catController.productImageData[index].mediaDetails?.sizes?.woocommerceThumbnail?.width ?? 70.h}'))),
+                                            InkWell(
+                                              onTap: () {
+                                                Get.toNamed(
+                                                    Routes.SHOPPAGEDETAIL,
+                                                    arguments: {
+                                                      'productData':
+                                                          shopController
+                                                                  .productData[
+                                                              index],
+                                                      'shopController':
+                                                          shopController,
+                                                      'storeController':
+                                                          storeController,
+                                                    });
+                                              },
+                                              child: Center(
+                                                  child: cachenetworkImage(
+                                                      shopController
+                                                              .productImageData[
+                                                                  index]
+                                                              .mediaDetails
+                                                              ?.sizes
+                                                              ?.woocommerceThumbnail
+                                                              ?.sourceUrl ??
+                                                          '',
+                                                      double.parse(
+                                                          '${shopController.productImageData[index].mediaDetails?.sizes?.woocommerceThumbnail?.height ?? 70.h}'),
+                                                      double.parse(
+                                                          '${shopController.productImageData[index].mediaDetails?.sizes?.woocommerceThumbnail?.width ?? 70.h}'))),
+                                            ),
 
                                             ///image
-                                            Text(
-                                              catController.productData[index]
-                                                      .title?.rendered ??
-                                                  '',
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                  fontSize: 15.sp,
-                                                  color: const Color.fromRGBO(
-                                                      68, 138, 255, 1),
-                                                  fontWeight: FontWeight.bold),
-                                              overflow: TextOverflow.ellipsis,
+                                            InkWell(
+                                              onTap: () {
+                                                Get.toNamed(
+                                                    Routes.SHOPPAGEDETAIL,
+                                                    arguments: {
+                                                      'productData':
+                                                          shopController
+                                                                  .productData[
+                                                              index],
+                                                      'shopController':
+                                                          shopController,
+                                                      'storeController':
+                                                          storeController,
+                                                    });
+                                              },
+                                              child: Text(
+                                                shopController
+                                                        .productData[index]
+                                                        .title
+                                                        ?.rendered ??
+                                                    '',
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                    fontSize: 15.sp,
+                                                    color: const Color.fromRGBO(
+                                                        68, 138, 255, 1),
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
                                             ),
                                             Align(
                                               alignment: Alignment.centerLeft,
                                               child: HtmlWidget(
-                                                catController.productData[index]
-                                                        .excerpt?.rendered ??
+                                                shopController
+                                                        .productData[index]
+                                                        .excerpt
+                                                        ?.rendered ??
                                                     '',
                                                 textStyle: const TextStyle(
                                                     color: Colors.grey),
@@ -388,21 +444,21 @@ class _CategoryDetailState extends State<CategoryDetail> {
                     ),
                     IconButton(
                         onPressed: () {
-                          catController.isGridView.value = true;
+                          shopController.isGridView.value = true;
                         },
                         icon: Icon(
                           Icons.grid_on_rounded,
-                          color: catController.isGridView.value
+                          color: shopController.isGridView.value
                               ? AppColors.darkBlack
                               : Colors.grey,
                         )),
                     InkWell(
                         onTap: () {
-                          catController.isGridView.value = false;
+                          shopController.isGridView.value = false;
                         },
                         child: Icon(
                           Icons.format_list_bulleted_rounded,
-                          color: catController.isGridView.value
+                          color: shopController.isGridView.value
                               ? Colors.grey
                               : AppColors.darkBlack,
                         ))

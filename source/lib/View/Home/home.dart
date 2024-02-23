@@ -1,10 +1,10 @@
 import 'package:ecom_wp/Model/Product%20Models/product.dart';
 import 'package:ecom_wp/Model/fotter_model.dart';
+import 'package:ecom_wp/Services/Controller/store_controller.dart';
 import 'package:ecom_wp/Utils/utils.dart';
 import 'package:ecom_wp/routes/app_pages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -23,6 +23,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final homePageController = Get.put(HomeController());
+  final storeController = Get.put(StoreController());
   final pageViewController = PageController();
 
   var footerList = [
@@ -73,7 +74,7 @@ class _HomeState extends State<Home> {
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               silverAppBar(
-                  homePageController: homePageController,
+                  storeController: storeController,
                   innerBoxIsScrolled: innerBoxIsScrolled,
                   scaffoldKey: _scaffoldKey)
             ];
@@ -86,7 +87,9 @@ class _HomeState extends State<Home> {
                 // padding: EdgeInsets.symmetric(horizontal: 10.w,vertical: 10.h),
                 height: 160.h,
                 width: double.infinity.w,
-                child: const CustomSlider(),
+                child: CustomSlider(
+                  storeController: storeController,
+                ),
               ),
 
               SizedBox(
@@ -191,7 +194,9 @@ class _HomeState extends State<Home> {
                                                             'productData':
                                                                 homePageController
                                                                         .productData[
-                                                                    index]
+                                                                    index],
+                                                            'storeController':
+                                                                storeController,
                                                           });
                                                     },
                                                     child: Text(
@@ -551,8 +556,8 @@ class _HomeState extends State<Home> {
   Widget cardWidget() {
     return Obx(
       () => Column(
-        children: homePageController.logoData.isNotEmpty
-            ? homePageController.logoData
+        children: storeController.logoData.isNotEmpty
+            ? storeController.logoData
                 .skip(8)
                 .map((insideModelData) => Container(
                       decoration: BoxDecoration(
@@ -561,7 +566,7 @@ class _HomeState extends State<Home> {
                       child: Stack(
                         children: [
                           Container(
-                            child: homePageController.logoData.isNotEmpty
+                            child: storeController.logoData.isNotEmpty
                                 ? cachenetworkImage(
                                     insideModelData.sourceUrl ?? '',
                                     double.maxFinite.h,
@@ -570,7 +575,7 @@ class _HomeState extends State<Home> {
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: homePageController.logoData.isNotEmpty
+                            children: storeController.logoData.isNotEmpty
                                 ? [
                                     ///text
                                     Row(
@@ -619,8 +624,12 @@ class _HomeState extends State<Home> {
                                     SizedBox(
                                       height: 15.h,
                                     ),
-                                    customButtton(
-                                        'Shop Now', 40.h, 110.w, () async {})
+                                    customButtton('Shop Now', 40.h, 110.w,
+                                        () async {
+                                      Get.toNamed(Routes.SHOPPAGE,arguments: {
+                                        'storeController': storeController
+                                      });
+                                    })
                                   ]
                                 : [],
                           ).paddingOnly(left: 15.0.w, top: 10.0.h),
