@@ -1,14 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 
-import '../../Constants/app_colors.dart';
-import '../../Controller/home_page_controller.dart';
+import '../../Utils/Constants/app_colors.dart';
+import '../../Services/Controller/home_page_controller.dart';
 import '../../Utils/utils.dart';
-import '../../Widgets/custom_widgets.dart';
+import '../../Utils/Widgets/custom_widgets.dart';
 
 class ProductDetail extends StatefulWidget {
   const ProductDetail({super.key});
@@ -21,7 +20,7 @@ class _ProductDetailState extends State<ProductDetail> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final homeController = Get.put(HomeController());
   var controller = TextEditingController();
-  var productId = Get.arguments['product_id'];
+  var productId = Get.arguments['productData'];
 
   var quantity = 1;
 
@@ -49,7 +48,7 @@ class _ProductDetailState extends State<ProductDetail> {
             },
             body: FutureBuilder(
               future:
-                  homeController.loadDeatilsOfProductDes(productId: productId),
+                  homeController.loadCatAndTag(data: productId),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
@@ -66,7 +65,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     children: [
                       ///text
                       Text(
-                        homeController.productDetail.value.title?.rendered ??
+                        productId.title?.rendered ??
                             '',
                         style: TextStyle(
                             fontSize: 18.sp,
@@ -171,8 +170,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: HtmlWidget(
-                          homeController
-                                  .productDetail.value.excerpt?.rendered ??
+                          productId.excerpt?.rendered ??
                               '',
                           textStyle: const TextStyle(color: Colors.grey),
                         ),
@@ -263,21 +261,54 @@ class _ProductDetailState extends State<ProductDetail> {
                                   'Category',
                                   style: TextStyle(color: AppColors.darkBlack),
                                 ),
-                                const SizedBox(
-                                  width: 10,
+                                SizedBox(
+                                  width: 10.w,
                                 ),
                                 Row(
-                                  children: homeController.productCatList
+                                  children: homeController.productCatData
                                       .map(
                                         (element) => Text(
                                           element.name.toString(),
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             color: Colors.blueAccent,
-                                            fontSize: 15,
+                                            fontSize: 15.sp,
                                           ),
                                           overflow: TextOverflow.visible,
                                           maxLines: 2,
                                         ),
+                                      )
+                                      .toList(),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          SizedBox(
+                            height: 10.h,
+                          ),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                const Text(
+                                  'Tag',
+                                  style: TextStyle(color: AppColors.darkBlack),
+                                ),
+                                SizedBox(
+                                  width: 10.w,
+                                ),
+                                Row(
+                                  children: homeController.productTagData
+                                      .map(
+                                        (element) => Text(
+                                          element.name.toString(),
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 15.sp,
+                                          ),
+                                          overflow: TextOverflow.visible,
+                                          maxLines: 2,
+                                        ).paddingOnly(left: 3.w),
                                       )
                                       .toList(),
                                 ),
@@ -296,8 +327,4 @@ class _ProductDetailState extends State<ProductDetail> {
               },
             )));
   }
-
-  // Widget quantityButton() {
-  //   return
-  // }
 }

@@ -1,5 +1,5 @@
-import 'package:ecom_wp/Constants/app_colors.dart';
-import 'package:ecom_wp/Controller/home_page_controller.dart';
+import 'package:ecom_wp/Utils/Constants/app_colors.dart';
+import 'package:ecom_wp/Services/Controller/home_page_controller.dart';
 import 'package:ecom_wp/routes/app_pages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,9 +7,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
-import '../../Controller/category_detail_controller.dart';
+import '../../Services/Controller/category_detail_controller.dart';
 import '../../Utils/utils.dart';
-import '../../Widgets/custom_widgets.dart';
+import '../../Utils/Widgets/custom_widgets.dart';
 
 class CategoryDetail extends StatefulWidget {
   CategoryDetail({super.key});

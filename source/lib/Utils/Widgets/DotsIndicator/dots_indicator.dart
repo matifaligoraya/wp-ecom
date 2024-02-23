@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:ecom_wp/Widgets/DotsIndicator/dots_decorator.dart';
+import 'package:ecom_wp/Utils/Widgets/DotsIndicator/dots_decorator.dart';
 import 'package:flutter/material.dart';
 
 typedef OnTap = void Function(int position);

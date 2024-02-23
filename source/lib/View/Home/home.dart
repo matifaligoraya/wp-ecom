@@ -1,15 +1,17 @@
+import 'package:ecom_wp/Model/Product%20Models/product.dart';
 import 'package:ecom_wp/Model/fotter_model.dart';
 import 'package:ecom_wp/Utils/utils.dart';
 import 'package:ecom_wp/routes/app_pages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../Constants/app_colors.dart';
-import '../../Controller/home_page_controller.dart';
-import '../../Widgets/custom_drawer.dart';
-import '../../Widgets/custom_widgets.dart';
+import '../../Utils/Constants/app_colors.dart';
+import '../../Services/Controller/home_page_controller.dart';
+import '../../Utils/Widgets/custom_drawer.dart';
+import '../../Utils/Widgets/custom_widgets.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -138,112 +140,127 @@ class _HomeState extends State<Home> {
 
                           ///listView
                           ,
-                        homePageController.isLoadingProductCat.value ? const Expanded(child: Center(child: CupertinoActivityIndicator(color: AppColors.darkBlack,),)) : Flexible(
-                              child: ListView.builder(
-                            padding: const EdgeInsets.only(top: 0.0),
-                            itemCount: homePageController.productData.length,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  ///row
-                                  Row(
-                                    children: [
-                                      ///image
-                                      cachenetworkImage(
-                                          homePageController
-                                                  .productImageData[index]
-                                                  .mediaDetails
-                                                  ?.sizes
-                                                  ?.woocommerceGalleryThumbnail
-                                                  ?.sourceUrl ??
-                                              '',
-                                          double.parse(
-                                              '${homePageController.productImageData[index].mediaDetails?.sizes?.woocommerceGalleryThumbnail?.height ?? 70.h}'),
-                                          double.parse(
-                                              '${homePageController.productImageData[index].mediaDetails?.sizes?.woocommerceGalleryThumbnail?.width ?? 70.h}')),
-
-                                      ///title
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                          homePageController.isLoadingProductCat.value
+                              ? const Expanded(
+                                  child: Center(
+                                  child: CupertinoActivityIndicator(
+                                    color: AppColors.darkBlack,
+                                  ),
+                                ))
+                              : Flexible(
+                                  child: ListView.builder(
+                                  padding: const EdgeInsets.only(top: 0.0),
+                                  itemCount:
+                                      homePageController.productData.length,
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      children: [
+                                        ///row
+                                        Row(
                                           children: [
-                                            ///text
-                                            InkWell(
-                                              hoverColor:
-                                                  AppColors.primaryYellow,
-                                              onTap: () {
-                                                Get.toNamed(
-                                                    Routes.PRODUCTDETAIL,
-                                                    arguments: {
-                                                      'homeController':
-                                                          homePageController,
-                                                      'product_id':
-                                                          homePageController
+                                            ///image
+                                            cachenetworkImage(
+                                                homePageController
+                                                        .productImageData[index]
+                                                        .mediaDetails
+                                                        ?.sizes
+                                                        ?.woocommerceGalleryThumbnail
+                                                        ?.sourceUrl ??
+                                                    '',
+                                                double.parse(
+                                                    '${homePageController.productImageData[index].mediaDetails?.sizes?.woocommerceGalleryThumbnail?.height ?? 70.h}'),
+                                                double.parse(
+                                                    '${homePageController.productImageData[index].mediaDetails?.sizes?.woocommerceGalleryThumbnail?.width ?? 70.h}')),
+
+                                            ///title
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  ///text
+                                                  InkWell(
+                                                    hoverColor:
+                                                        AppColors.primaryYellow,
+                                                    onTap: () {
+                                                      Get.toNamed(
+                                                          Routes.PRODUCTDETAIL,
+                                                          arguments: {
+                                                            'homeController':
+                                                                homePageController,
+                                                            'productData':
+                                                                homePageController
+                                                                        .productData[
+                                                                    index]
+                                                          });
+                                                    },
+                                                    child: Text(
+                                                      homePageController
                                                               .productData[
                                                                   index]
-                                                              .id
-                                                    });
-                                              },
-                                              child: Text(
-                                                homePageController
-                                                        .productData[index]
-                                                        .title
-                                                        ?.rendered ??
-                                                    '',
-                                                maxLines: 2,
-                                                style: TextStyle(
-                                                    fontSize: 12.sp,
-                                                    color: Colors.blueAccent,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                                overflow: TextOverflow.visible,
+                                                              .title
+                                                              ?.rendered ??
+                                                          '',
+                                                      maxLines: 2,
+                                                      style: TextStyle(
+                                                          fontSize: 12.sp,
+                                                          color:
+                                                              Colors.blueAccent,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                      overflow:
+                                                          TextOverflow.visible,
+                                                    ),
+                                                  ),
+                                                  // HtmlWidget(
+                                                  //    data.content?.rendered?? '',
+                                                  // ),
+                                                  Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Text(
+                                                        '\$82.98',
+                                                        style: TextStyle(
+                                                            fontSize: 12.sp,
+                                                            color:
+                                                                Colors.red[700],
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                        overflow: TextOverflow
+                                                            .visible,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 5.w,
+                                                      ),
+                                                      Text(
+                                                        '\$182.98',
+                                                        style: TextStyle(
+                                                            fontSize: 10.sp,
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .lineThrough,
+                                                            decorationColor:
+                                                                Colors.grey,
+                                                            color: Colors.grey,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                        overflow: TextOverflow
+                                                            .visible,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
                                               ),
-                                            ),
-                                            // HtmlWidget(
-                                            //    data.content?.rendered?? '',
-                                            // ),
-                                            Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Text(
-                                                  '\$82.98',
-                                                  style: TextStyle(
-                                                      fontSize: 12.sp,
-                                                      color: Colors.red[700],
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  overflow:
-                                                      TextOverflow.visible,
-                                                ),
-                                                SizedBox(
-                                                  width: 5.w,
-                                                ),
-                                                Text(
-                                                  '\$182.98',
-                                                  style: TextStyle(
-                                                      fontSize: 10.sp,
-                                                      decoration: TextDecoration
-                                                          .lineThrough,
-                                                      decorationColor:
-                                                          Colors.grey,
-                                                      color: Colors.grey,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                  overflow:
-                                                      TextOverflow.visible,
-                                                ),
-                                              ],
-                                            ),
+                                            )
                                           ],
-                                        ),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              );
-                            },
-                          ))
+                                        )
+                                      ],
+                                    );
+                                  },
+                                ))
                         ]).paddingSymmetric(horizontal: 10.0.w))
                     .paddingSymmetric(horizontal: 15.0.w),
               ),
@@ -251,6 +268,88 @@ class _HomeState extends State<Home> {
               SizedBox(
                 height: 20.h,
               ),
+              Text(
+                'Top Categories Of The Month',
+                style: TextStyle(
+                    color: AppColors.darkBlack,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold),
+              ).paddingOnly(bottom: 3.0.h, top: 5.0.w, left: 10.w),
+
+              Obx(
+                () => SizedBox(
+                  height: 300.h,
+                  width: double.infinity.w,
+                  child: homePageController.isLoadingProductCat.value
+                      ? const Center(
+                          child: CupertinoActivityIndicator(
+                            color: AppColors.darkBlack,
+                          ),
+                        )
+                      : GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3, // number of items in each row
+                            mainAxisSpacing: 8.0, // spacing between rows
+                            crossAxisSpacing: 8.0, // spacing between columns
+                          ),
+                          padding: EdgeInsets.only(
+                              top: 5.h), // padding around the grid
+                          itemCount: homePageController
+                              .productCatData.length, // total number of items
+                          itemBuilder: (context, index) {
+                            var productCategoryIDs =
+                                homePageController.productCatData;
+                            var productData =
+                                homePageController.productCatData[index];
+                            // Ensure productCategoryIDs is not null
+                            List<Product> data = [];
+                            // Find the first matching category
+                            for (var i in productCategoryIDs) {
+                              var secondData = homePageController.productData
+                                  .firstWhereOrNull(
+                                (element) => element.productCat!.contains(i.id),
+                              );
+                              data.add(secondData ?? Product());
+                            }
+
+                            var thirdData = data[index];
+                            var imageData = homePageController.productImageData
+                                .firstWhereOrNull(
+                              (element) =>
+                                  element.id == thirdData.featuredMedia,
+                            );
+                            var imageString = imageData?.mediaDetails?.sizes
+                                    ?.woocommerceGalleryThumbnail?.sourceUrl ??
+                                '';
+                            return Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.grey, width: 1.0.w)),
+                                child: Column(
+                                  children: [
+                                    //image
+                                    Center(
+                                      child: cachenetworkImage(
+                                          imageString,
+                                          double.parse(
+                                              '${imageData?.mediaDetails?.sizes?.woocommerceGalleryThumbnail?.height ?? 70.h}'),
+                                          double.parse(
+                                              '${imageData?.mediaDetails?.sizes?.woocommerceGalleryThumbnail?.width ?? 70.h}')),
+                                    ),
+                                    Flexible(
+                                      child: Center(
+                                        child: Text(
+                                          productData.name ?? '',
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ));
+                          }),
+                ),
+              ).paddingSymmetric(horizontal: 15.0.w)
             ],
           ),
         ));
@@ -262,65 +361,66 @@ class _HomeState extends State<Home> {
           border: Border.all(color: AppColors.primaryYellow, width: 2.0.w)),
       height: 400.h,
       width: double.infinity.w,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         ///title and button section
         Align(
           alignment: Alignment.topCenter,
           child: Container(
             decoration: const BoxDecoration(
                 border: Border(bottom: BorderSide(color: AppColors.darkBlack))),
-            child:
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              ///title
-              Text(
-                'Deals Of The Day',
-                style: TextStyle(
-                    color: AppColors.darkBlack,
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold),
-              ),
-          
-              ///buttons
-              Row(
-                mainAxisSize: MainAxisSize.min,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                      onPressed: () {
-                        pageViewController.animateToPage(
-                          pageViewController.page!.toInt() + 1,
-                          duration: const Duration(milliseconds: 1000),
-                          curve: Curves.easeInOutQuad,
-                        );
-                      },
-                      icon: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(color: AppColors.darkBlack),
-                              shape: BoxShape.circle),
-                          child: Icon(
-                            Icons.arrow_forward_ios_rounded,
-                            size: 12.0.h,
-                          ).paddingAll(5.0))),
-                  IconButton(
-                      onPressed: () {
-                        pageViewController.animateToPage(
-                          pageViewController.page!.toInt() - 1,
-                          duration: const Duration(milliseconds: 1000),
-                          curve: Curves.easeInOutQuad,
-                        );
-                      },
-                      icon: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(color: AppColors.darkBlack),
-                              shape: BoxShape.circle),
-                          child: Icon(
-                            Icons.arrow_back_ios_new_rounded,
-                            size: 12.0.h,
-                          ).paddingAll(5.0)))
-                ],
-              )
-            ]).paddingOnly(bottom: 5.0.h, top: 5.0.w),
+                  ///title
+                  Text(
+                    'Deals Of The Day',
+                    style: TextStyle(
+                        color: AppColors.darkBlack,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold),
+                  ),
+
+                  ///buttons
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            pageViewController.animateToPage(
+                              pageViewController.page!.toInt() + 1,
+                              duration: const Duration(milliseconds: 1000),
+                              curve: Curves.easeInOutQuad,
+                            );
+                          },
+                          icon: Container(
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: AppColors.darkBlack),
+                                  shape: BoxShape.circle),
+                              child: Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                size: 12.0.h,
+                              ).paddingAll(5.0))),
+                      IconButton(
+                          onPressed: () {
+                            pageViewController.animateToPage(
+                              pageViewController.page!.toInt() - 1,
+                              duration: const Duration(milliseconds: 1000),
+                              curve: Curves.easeInOutQuad,
+                            );
+                          },
+                          icon: Container(
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: AppColors.darkBlack),
+                                  shape: BoxShape.circle),
+                              child: Icon(
+                                Icons.arrow_back_ios_new_rounded,
+                                size: 12.0.h,
+                              ).paddingAll(5.0)))
+                    ],
+                  )
+                ]).paddingOnly(bottom: 5.0.h, top: 5.0.w),
           ),
         ),
 
@@ -332,7 +432,8 @@ class _HomeState extends State<Home> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Expanded(
                   child: Center(
-                    child: CupertinoActivityIndicator(color: AppColors.darkBlack),
+                    child:
+                        CupertinoActivityIndicator(color: AppColors.darkBlack),
                   ),
                 );
               } else if (snapshot.hasError) {
@@ -408,9 +509,6 @@ class _HomeState extends State<Home> {
                                     fontWeight: FontWeight.bold),
                                 overflow: TextOverflow.visible,
                               ),
-                              // HtmlWidget(
-                              //    data.content?.rendered?? '',
-                              // ),
                               Row(
                                 children: [
                                   Text(
@@ -440,6 +538,7 @@ class _HomeState extends State<Home> {
                           );
                         }
                       }
+                      return const Column();
                     },
                   )),
                 );

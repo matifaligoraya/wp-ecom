@@ -1,17 +1,17 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:ecom_wp/Utils/utils.dart';
-import 'package:ecom_wp/Widgets/custom_textField.dart';
+import 'package:ecom_wp/Utils/Widgets/custom_textField.dart';
 import 'package:ecom_wp/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../Constants/app_colors.dart';
-import '../Controller/home_page_controller.dart';
-import '../View/Checkout/checkout_screen.dart';
-import '../View/Profile/profile_screen.dart';
-import '../View/Whishlist/whish_list_screen.dart';
+import '../../Services/Controller/home_page_controller.dart';
+import '../../View/Checkout/checkout_screen.dart';
+import '../../View/Profile/profile_screen.dart';
+import '../../View/Whishlist/whish_list_screen.dart';
 import 'DotsIndicator/dots_decorator.dart';
 import 'DotsIndicator/dots_indicator.dart';
 
