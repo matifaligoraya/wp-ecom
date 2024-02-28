@@ -490,7 +490,8 @@ class _HomeState extends State<Home> {
                                 onTap: () {
                                   Get.toNamed(Routes.CATDETAIL, arguments: {
                                     'catId': category.id,
-                                    'homeController': homePageController
+                                    'homeController': homePageController,
+                                    'storeController':storeController
                                   });
                                 },
                                 child: Text(
