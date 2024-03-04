@@ -1,5 +1,5 @@
 <p align="center">
-    <a href="https://store.sublimescripts.com"><img src="https://store.sublimescripts.com/wp-content/uploads/2024/02/wheelust.png" alt="Total Downloads"></a>
+    <a href="https://store.sublimescripts.com"><img src="https://store.sublimescripts.com/wp-content/uploads/2024/02/CartPioneer.png" alt="Total Downloads"></a>
 </p>
 
 # CartPioneer: Flutter eCommerce App with WordPress API
@@ -190,7 +190,7 @@ Contributions are welcome! Follow the contribution guidelines to get started.
 
 ## License
 
-Wheelust is open-sourced software licensed under the MIT license.
+CartPioneer is open-sourced software licensed under the MIT license.
 
 
 
