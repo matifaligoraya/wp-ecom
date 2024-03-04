@@ -2,18 +2,13 @@
     <a href="https://store.sublimescripts.com"><img src="https://store.sublimescripts.com/wp-content/uploads/2024/02/wheelust.png" alt="Total Downloads"></a>
 </p>
 
-<!-- <p align="center">
-    <a href="https://twitter.com/intent/follow?screen_name=bagistoshop"><img src="https://img.shields.io/twitter/follow/bagistoshop?style=social"></a>
-    <a href="https://www.youtube.com/channel/UCbrfqnhyiDv-bb9QuZtonYQ"><img src="https://img.shields.io/youtube/channel/subscribers/UCbrfqnhyiDv-bb9QuZtonYQ?style=social"></a>
-</p> -->
+# CartPioneer: Flutter eCommerce App with WordPress API
 
-# Wheelust: Flutter eCommerce App with WordPress API
-
-[Wheelust](https://store.sublimescripts.com/) is an open-source eCommerce mobile app created with Flutter and powered by the WordPress API. It revolutionizes mobile commerce, transforming your SublimeScripts store into a dynamic platform.
+[CartPioneer](https://store.sublimescripts.com/) is an open-source eCommerce mobile app created with Flutter and powered by the WordPress API. It revolutionizes mobile commerce, transforming your SublimeScripts store into a dynamic platform.
 
 ## Overview
 
-Wheelust seamlessly synchronizes products and categories in real-time, providing a user-friendly interface for efficient order management. Built on the SublimeScripts eCommerce framework and leveraging the robust Laravel stack, it offers comprehensive features for a superior mobile shopping experience.
+CartPioneer seamlessly synchronizes products and categories in real-time, providing a user-friendly interface for efficient order management. Built on the SublimeScripts eCommerce framework and leveraging the robust Laravel stack, it offers comprehensive features for a superior mobile shopping experience.
 
 ## Features
 
@@ -21,46 +16,13 @@ Wheelust seamlessly synchronizes products and categories in real-time, providing
 - **User-friendly Interface:** Effortlessly manage orders with a simple and intuitive design.
 - **Built on SublimeScripts and Laravel:** Utilizes a powerful eCommerce framework for robust functionality.
 - **Accelerated Time-to-Market:** Easily manage product information for quicker launches.
-- **Complete Control:** Take charge of your store with Wheelust's comprehensive features.
-
-<!-- # Live Demo
-
-Android: https://play.google.com/store/apps/details?id=com.webkul.bagisto.mobikul
-
-iOS: https://apps.apple.com/us/app/mobikul-bagisto-laravel-app/id6447519140 -->
-<!-- # Features
-
-The open-source ecommerce mobile app comes with an array of features to improve your customers' shopping experience. 
-
-## Interactive Home Page and Search
-
-![enter image description here](https://raw.githubusercontent.com/bagisto/temp-media/master/img1.png)
-
-## All Type Product Supported
-
-![enter image description here](https://raw.githubusercontent.com/bagisto/temp-media/master/img2%20(1).png)
-
-## Dark Mode and Push Notification
-
-![enter image description here](https://raw.githubusercontent.com/bagisto/temp-media/master/img6.png)
-
-## Discount Coupons and Guest Checkout
-
-![enter image description here](https://raw.githubusercontent.com/bagisto/temp-media/master/img5.png)
-
-## Wishlist and Compare Product 
-
-![enter image description here](https://raw.githubusercontent.com/bagisto/temp-media/master/img4.png)
-
-## Share and Product Reviews
-
-![enter image description here](https://raw.githubusercontent.com/bagisto/temp-media/master/img3.png) -->
+- **Complete Control:** Take charge of your store with CartPioneer's comprehensive features.
 
 ## Installation Guide
 
 Before beginning with the installation, you will need the following with the mentioned versions
 
-- Wheelust Version - v1.0.0
+- CartPioneer Version - v1.0.0
 - Android Studio Version - Flamingo | 2022.2.1 
 - Flutter Version - 3.19.1
 - Dart - 3.2.5
